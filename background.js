@@ -14,6 +14,7 @@ chrome.webNavigation.onCompleted.addListener(async (details) => {
     console.log("Detected Issues:", issues);  // Debugging
 
     if (issues.length > 0) {
+      location.replace("https://www.w3schools.com")
       showNotification(`Issues detected:\n${issues.join("\n")}`, true);
     } else {
       showNotification("Everything looks good!", false);
