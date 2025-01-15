@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "My First Extension",
+  "version": "1.0",
+  "description": "This is a simple Chrome extension.",
+  "icons": {
+    "48": "icon.png"
+  },
+  "permissions": [
+    "tabs", 
+    "activeTab", 
+    "webNavigation", 
+    "notifications",
+    "storage",
+    "https://www.virustotal.com/*"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "48": "icon.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  }
+}
