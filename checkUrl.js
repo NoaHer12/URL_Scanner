@@ -1,29 +1,30 @@
 
 // main function - run test on url and return issues array
-export async function checkUrl(urlString) {
+export function checkUrl(urlString) {
     const url = new URL(urlString);
     let issues = [];
   
     // Example heuristic checks
     if (isIpAddress(url.hostname)) {
-      issues.push("The site uses an IP address instead of a domain name.");
+      issues.push("The site uses an IP address instead of a domain name /n");
     }
     if (url.hostname.split('.').length > 3) {
-      issues.push("The site has too many subdomains.");
+      issues.push("The site has too many subdomains /n");
     }
     if (/[#@\$%]/.test(url.href)) {
-      issues.push("The site has suspicious characters.");
+      issues.push("The site has suspicious characters /n");
     }
     if (url.href.length > 300) {
-      issues.push("The URL is too long.");
+      issues.push("The URL is too long /n");
     }
     if (isMaliciousCountry(url.hostname)) {
-      issues.push("The site is from a potentially malicious country.");
+      issues.push("The site is from a potentially malicious country /n");
     }
-  
-    const VirusTotalCheck = checkUrlWithVirusTotal(url.href);
-    issues.push("VirusTotal check : " + await VirusTotalCheck);  // Add the result of the VirusTotal check to issues
-  
+    
+    if (checkUrlWithVirusTotal(url.href)) {
+      issues.push("Accordint to VirusTotal the URL is probably malicious /n");
+    }
+
     return issues;
   }
   
@@ -45,7 +46,7 @@ export async function checkUrl(urlString) {
     return false;
   }
   
-  async function checkUrlWithVirusTotal(url) {
+  export async function checkUrlWithVirusTotal(url) {
     const apiKey = 'ee56d4d1891d292147941ada817f71ff68c27efab64fd85fd66c04d4a23a0783';
     try {
       const submitUrl = 'https://www.virustotal.com/api/v3/urls';
@@ -60,7 +61,7 @@ export async function checkUrl(urlString) {
       
       const responseData = await response.json();
       if (!response.ok || !responseData.data) {
-        return (`Failed to submit URL`);
+        return false;
       }
   
       // Extract the URL scan ID from the response
@@ -80,11 +81,15 @@ export async function checkUrl(urlString) {
       // Check for malicious status
       const stats = analysisData.data.attributes.stats;
       if (stats.malicious > 0) {
-        return ("Malicious URL detected");
-      } else {
-        return ("URL appears safe");
+        return true;
       }
+      else{
+        return false;
+      }
+      // } else {
+      //   return ("URL appears safe");
+      // }
     } catch (error) {
-      return ("Error checking URL with VirusTotal");
+      return false;
     }
   }

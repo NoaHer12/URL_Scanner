@@ -14,9 +14,11 @@ chrome.webNavigation.onCompleted.addListener(async (details) => {
     console.log("Detected Issues:", issues);  // Debugging
 
     if (issues.length > 0) {
-      location.replace("https://www.w3schools.com")
-      showNotification(`Issues detected:\n${issues.join("\n")}`, true);
-    } else {
+      chrome.storage.local.set({ warnings: issues }, () => {
+        chrome.tabs.update(details.tabId, { url: chrome.runtime.getURL("warningsPage.html") });
+      });
+    }
+     else {
       showNotification("Everything looks good!", false);
     }
   }
