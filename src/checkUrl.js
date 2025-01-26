@@ -1,6 +1,7 @@
 // Main function - runs a test on a URL and returns an array of detected issues
-export async function checkUrl(urlString) {
-  const url = new URL(urlString);
+export function checkUrl(urlString) {
+  try {
+    const url = new URL(urlString);
   let issues = [];
 
   // Step 1: Check if the URL uses an IP address instead of a domain
@@ -29,6 +30,10 @@ export async function checkUrl(urlString) {
   }
 
   return issues;
+  }
+  catch (error) {
+    return ["Invalid URL"];
+  }
 }
 
 // Helper function: Determines if the hostname is an IP address instead of a domain name

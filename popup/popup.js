@@ -1,4 +1,4 @@
-import { checkWithVirusTotal } from "../virusTotalCheck.js";
+import { checkWithVirusTotal } from "../src/virusTotalCheck.js";
 import { checkUrl } from "../src/checkUrl.js";
 
 // Event listener for the button click in the popup
@@ -23,7 +23,7 @@ document.getElementById('checkButton').addEventListener('click', async () => {
         resultDiv.textContent = 'Checking with local URL analysis...';
         
         // Step 2: If VirusTotal results are clean, perform local URL analysis
-        const issues = await checkUrl(url);
+        const issues = checkUrl(url);
         
         // Display the results based on the analysis outcome
         resultDiv.textContent = issues.length > 0 

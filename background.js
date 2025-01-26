@@ -1,4 +1,4 @@
-import { checkWithSafeBrowsing } from "./safeBrowsingCheck.js";
+import { checkWithSafeBrowsing } from "./src/safeBrowsingCheck.js";
 import { checkUrl } from "./src/checkUrl.js";
 
 // Listener that runs when the extension is installed
@@ -21,7 +21,7 @@ chrome.webNavigation.onCompleted.addListener(async (details) => {
         }
 
         // Step 2: If Safe Browsing result is clean, proceed with a local URL check
-        const issues = await checkUrl(currentUrl);
+        const issues = checkUrl(currentUrl);
 
         // Display results from the local URL check
         if (issues.length > 0) {
