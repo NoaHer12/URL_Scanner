@@ -1,5 +1,5 @@
-import { checkWithVirusTotal } from "./virusTotalCheck.js";
-import { checkUrl } from "./checkUrl.js";
+import { checkWithVirusTotal } from "../virusTotalCheck.js";
+import { checkUrl } from "../src/checkUrl.js";
 
 // Event listener for the button click in the popup
 // This will trigger the URL scanning process

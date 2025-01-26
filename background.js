@@ -1,5 +1,5 @@
 import { checkWithSafeBrowsing } from "./safeBrowsingCheck.js";
-import { checkUrl } from "./checkUrl.js";
+import { checkUrl } from "./src/checkUrl.js";
 
 // Listener that runs when the extension is installed
 chrome.runtime.onInstalled.addListener(() => {
