@@ -59,16 +59,5 @@ To use the Google Safe Browsing API, you may need to adjust your security settin
 
 ---
 
-## Usage Examples
-
-### Example 1: Automatic URL Check
-- Navigate to a website, and the extension will scan the URL automatically.
-- A notification will appear with the results.
-
-### Example 2: Manual URL Check
-- Open the popup, paste the URL, and press the “Scan” button.
-- Review the results displayed in the popup.
-
----
 
 Thank you for using URL Scanner!
