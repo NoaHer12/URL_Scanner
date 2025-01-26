@@ -1,30 +1,38 @@
 {
   "manifest_version": 3,
-  "name": "My First Extension",
-  "version": "1.0",
-  "description": "This is a simple Chrome extension.",
+  "name": "VirusTotal URL & File Checker",
+  "version": "1.2",
+  "description": "Checks URLs and downloaded files against VirusTotal.",
   "icons": {
     "48": "icon.png"
   },
   "permissions": [
-    "tabs", 
-    "activeTab", 
-    "webNavigation", 
+    "tabs",
+    "activeTab",
+    "webNavigation",
+    "downloads",
+    "downloads.open",
     "notifications",
     "storage",
-    "https://www.virustotal.com/*"
+    "webRequest",
+    "declarativeNetRequest",
+    "nativeMessaging",
+    "declarativeNetRequestFeedback"
   ],
   "host_permissions": [
-    "<all_urls>"
+    "<all_urls>",
+    "file://*",
+    "https://www.virustotal.com/*",
+    "https://safebrowsing.googleapis.com/*"
   ],
+  "background": {
+  "service_worker": "background.js",
+  "type": "module"
+},
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
       "48": "icon.png"
     }
-  },
-  "background": {
-    "service_worker": "background.js",
-    "type": "module"
   }
 }

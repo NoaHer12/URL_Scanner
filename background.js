@@ -1,37 +1,44 @@
+import { checkWithSafeBrowsing } from "./safeBrowsingCheck.js";
 import { checkUrl } from "./checkUrl.js";
 
+// Listener that runs when the extension is installed
 chrome.runtime.onInstalled.addListener(() => {
-  console.log("Extension installed");
 });
 
-// Listen for page load completion
+// Listener that triggers when a page completes loading
 chrome.webNavigation.onCompleted.addListener(async (details) => {
-  const currentUrl = details.url;
-  console.log("Navigation detected:", currentUrl);
+    // Ensure this runs only for the main page (not frames)
+    if (details.frameId === 0) {
+        const currentUrl = details.url;
+        
+        // Step 1: Check the URL with Google Safe Browsing
+        const sbResult = await checkWithSafeBrowsing(currentUrl);
+        
+        // If Safe Browsing detects a malicious or suspicious URL, stop further checks and alert the user
+        if (sbResult.includes("malicious") || sbResult.includes("suspicious")) {
+            showNotification(`⚠️ Google Safe Browsing Warning:\n${sbResult}`, true);
+            return;
+        }
 
-  if (details.frameId === 0) {  // Only for top-level frames
-    const issues = await checkUrl(currentUrl);  // Wait for issues to be fetched
-    console.log("Detected Issues:", issues);  // Debugging
+        // Step 2: If Safe Browsing result is clean, proceed with a local URL check
+        const issues = await checkUrl(currentUrl);
 
-    if (issues.length > 0) {
-      chrome.storage.local.set({ warnings: issues }, () => {
-        chrome.tabs.update(details.tabId, { url: chrome.runtime.getURL("warningsPage.html") });
-      });
+        // Display results from the local URL check
+        if (issues.length > 0) {
+            showNotification(`⚠️ Issues detected:\n${issues.join("\n")}`, true);
+        } else {
+            showNotification("✅ Everything looks good!", false);
+        }
     }
-     else {
-      showNotification("Everything looks good!", false);
-    }
-  }
 }, { url: [{ schemes: ['http', 'https'] }] });
 
-
-// Function to show a notification
+// Function to display a Chrome notification
 function showNotification(message, isMalicious) {
-  chrome.notifications.create({
-    type: "basic",
-    iconUrl: "/icon.png", // Ensure this path is correct and icon exists
-    title: isMalicious ? "Warning: URL Issues" : "URL Check Passed",
-    message: message,
-    priority: 2, // Set the priority to ensure it shows prominently
-  });
+    chrome.notifications.create({
+        type: "basic",
+        iconUrl: "/icon.png",
+        title: isMalicious ? "Warning: URL Issues" : "URL Check Passed",
+        message: message,
+        priority: 2
+    });
 }
